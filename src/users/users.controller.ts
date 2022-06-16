@@ -36,6 +36,13 @@ export class UsersController {
         return user;
     }
 
+    @Post('/signin')
+    async signIn(@Body() body: CreateUserDto, @Session() session: any) {
+        const user = await this.authService.signIn(body.email, body.password);
+        session.userId = user.id;
+        return user;
+    }
+
     @Get('/whoami')
     @UseGuards(AuthGuard)
     whoAmI(@CurrentUser() user: User) {
@@ -46,13 +53,6 @@ export class UsersController {
     @Post('/signout')
     signOut(@Session() session: any) {
         session.userId = null;
-    }
-
-    @Post('/signin')
-    async signIn(@Body() body: CreateUserDto, @Session() session: any) {
-        const user = await this.authService.signIn(body.email, body.password);
-        session.userId = user.id;
-        return user;
     }
 
     @Get('/:id')
