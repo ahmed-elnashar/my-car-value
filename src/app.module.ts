@@ -1,6 +1,7 @@
 import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
 import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -27,12 +28,6 @@ const cookieSession = require('cookie-session');
         };
       }
     }),
-    // TypeOrmModule.forRoot({
-    //   type: 'sqlite',
-    //   database: 'db.sqlite',
-    //   entities: [User, Report],
-    //   synchronize: true
-    // }),
     UsersModule,
     ReportsModule
   ],
@@ -49,6 +44,8 @@ const cookieSession = require('cookie-session');
 })
 
 export class AppModule {
+
+  constructor(private dataSource: DataSource) { }
 
   configure(consumer: MiddlewareConsumer) {
     consumer
